@@ -1,3 +1,35 @@
+import re
+from datetime import datetime
+
+CATEGORIES = [
+    "Food & Snacks", "Laundry", "Mobile", "Air Travel",
+    "Ground Transport", "Hotel Accommodation",
+    "Printing & Stationery", "Digital Media Payments",
+    "Vendor Payments", "Others",
+]
+
+CATEGORY_KEYWORDS = {
+    "Food & Snacks": [
+        "restaurant service", "restaurant name", "food", "grocery",
+        "blink commerce", "zomato hyperpure", "grofers", "domino",
+        "chai", "bakers", "pizza", "cafe", "superwell comtrade",
+    ],
+    "Laundry": ["washeteria", "fabklean", "wash & iron", "laundry", "dry clean"],
+    "Ground Transport": ["rapido", "cab_receipt", "auto_receipt", "ride id", "uber", "ola", "taxi"],
+    "Mobile": ["mobile recharge", "telecom", "airtel", "jio", "vodafone"],
+    "Air Travel": ["airline", "flight", "boarding pass", "air india", "indigo"],
+    "Hotel Accommodation": ["hotel accommodation", "hotel booking", "lodging", "guest house"],
+    "Printing & Stationery": ["printing", "photocopy", "stationery", "toner"],
+    "Digital Media Payments": ["meta ads", "facebook ads", "google ads", "instagram ads"],
+    "Vendor Payments": ["payment voucher", "vendor payment", "professional fee", "consultancy"],
+}
+
+def _clean_lines(text):
+    return [re.sub(r"\s+", " ", x).strip(" \t:|") for x in text.splitlines() if x.strip()]
+
+def _find_bill_number(text):
+    # Zomato/restaurant tax invoices
+    patterns = [
         r"\bInvoice\s*No\.?\s*[:\-]?\s*([A-Z0-9][A-Z0-9/\-]{4,})",
         r"\bInvoice\s*Number\s*[:\-]?\s*([A-Z0-9][A-Z0-9/\-]{4,})",
         # Laundry invoices (e.g. INV-2997, sometimes split over lines)
