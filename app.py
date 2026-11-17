@@ -1,8 +1,8 @@
 import streamlit as st
-from modules.bill_reader import extract_text_from_file
-from modules.extractor import extract_bill_fields
-from modules.excel_generator import build_excel
-from modules.utils import safe_filename
+from bill_reader import extract_text_from_file
+from extractor import extract_bill_fields
+from excel_generator import build_excel
+from utils import safe_filename
 
 st.set_page_config(page_title="BillScan", page_icon="🧾", layout="centered")
 
